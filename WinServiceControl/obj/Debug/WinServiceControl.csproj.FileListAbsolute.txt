@@ -1,0 +1,8 @@
+E:\Job\Project\DemoWinService\WinServiceControl\bin\Debug\WinServiceControl.exe
+E:\Job\Project\DemoWinService\WinServiceControl\bin\Debug\WinServiceControl.pdb
+E:\Job\Project\DemoWinService\WinServiceControl\obj\Debug\WinServiceControl.csprojResolveAssemblyReference.cache
+E:\Job\Project\DemoWinService\WinServiceControl\obj\Debug\WinServiceControl.Form1.resources
+E:\Job\Project\DemoWinService\WinServiceControl\obj\Debug\WinServiceControl.Properties.Resources.resources
+E:\Job\Project\DemoWinService\WinServiceControl\obj\Debug\WinServiceControl.csproj.GenerateResource.Cache
+E:\Job\Project\DemoWinService\WinServiceControl\obj\Debug\WinServiceControl.exe
+E:\Job\Project\DemoWinService\WinServiceControl\obj\Debug\WinServiceControl.pdb
