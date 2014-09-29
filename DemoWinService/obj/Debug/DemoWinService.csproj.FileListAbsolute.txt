@@ -6,3 +6,11 @@ E:\Job\Project\DemoWinService\DemoWinService\obj\Debug\DemoWinService.exe
 E:\Job\Project\DemoWinService\DemoWinService\obj\Debug\DemoWinService.pdb
 E:\Job\Project\DemoWinService\DemoWinService\obj\Debug\DemoWinService.ProjectInstaller.resources
 E:\Job\Project\DemoWinService\DemoWinService\obj\Debug\DemoWinService.DemoService.resources
+E:\Job\Project\DemoWinService\windows-service\DemoWinService\obj\Debug\DemoWinService.exe
+E:\Job\Project\DemoWinService\windows-service\DemoWinService\obj\Debug\DemoWinService.pdb
+E:\Job\Project\DemoWinService\windows-service\DemoWinService\bin\Debug\DemoWinService.exe
+E:\Job\Project\DemoWinService\windows-service\DemoWinService\bin\Debug\DemoWinService.pdb
+E:\Job\Project\DemoWinService\windows-service\DemoWinService\obj\Debug\DemoWinService.csprojResolveAssemblyReference.cache
+E:\Job\Project\DemoWinService\windows-service\DemoWinService\obj\Debug\DemoWinService.MyWebRequest.resources
+E:\Job\Project\DemoWinService\windows-service\DemoWinService\obj\Debug\DemoWinService.ProjectInstaller.resources
+E:\Job\Project\DemoWinService\windows-service\DemoWinService\obj\Debug\DemoWinService.csproj.GenerateResource.Cache

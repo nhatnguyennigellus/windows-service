@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.ServiceProcess;
+using DemoWinService;
 
 namespace WinServiceControl
 {
@@ -18,17 +19,23 @@ namespace WinServiceControl
         }
 
         ServiceController sc = new ServiceController("DemoService", "NigellusNguyen");
+        MyWebRequest request;
         private void Form1_Load(object sender, EventArgs e)
         {
-
+           
+            
         }
 
         private void btnStart_Click(object sender, EventArgs e)
         {
-            sc.Start();
+           // sc.Start();
+            sttService.Text = "Connecting to server...";
+            
             //MessageBox.Show("Service is running...");
-            sc.WaitForStatus(System.ServiceProcess.ServiceControllerStatus.Running);
+            //sc.WaitForStatus(System.ServiceProcess.ServiceControllerStatus.Running);
             sttService.Text = "Service is running...";
+            request = new MyWebRequest("http://192.168.12.250:8889/ping", "GET");
+            sttService.Text = request.GetResponse();
         }
 
         private void btnStop_Click(object sender, EventArgs e)

@@ -35,7 +35,7 @@ namespace DemoWinService
             // timer1
             // 
             this.timer1.Enabled = true;
-            this.timer1.Interval = 5000D;
+            this.timer1.Interval = 300000D;
             this.timer1.Elapsed += new System.Timers.ElapsedEventHandler(this.timer1_Tick);
             // 
             // DemoService

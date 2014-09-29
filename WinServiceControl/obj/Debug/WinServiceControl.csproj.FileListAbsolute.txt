@@ -6,3 +6,13 @@ E:\Job\Project\DemoWinService\WinServiceControl\obj\Debug\WinServiceControl.Prop
 E:\Job\Project\DemoWinService\WinServiceControl\obj\Debug\WinServiceControl.csproj.GenerateResource.Cache
 E:\Job\Project\DemoWinService\WinServiceControl\obj\Debug\WinServiceControl.exe
 E:\Job\Project\DemoWinService\WinServiceControl\obj\Debug\WinServiceControl.pdb
+E:\Job\Project\DemoWinService\windows-service\WinServiceControl\bin\Debug\WinServiceControl.exe
+E:\Job\Project\DemoWinService\windows-service\WinServiceControl\bin\Debug\WinServiceControl.pdb
+E:\Job\Project\DemoWinService\windows-service\WinServiceControl\bin\Debug\DemoWinService.exe
+E:\Job\Project\DemoWinService\windows-service\WinServiceControl\bin\Debug\DemoWinService.pdb
+E:\Job\Project\DemoWinService\windows-service\WinServiceControl\obj\Debug\WinServiceControl.csprojResolveAssemblyReference.cache
+E:\Job\Project\DemoWinService\windows-service\WinServiceControl\obj\Debug\WinServiceControl.Form1.resources
+E:\Job\Project\DemoWinService\windows-service\WinServiceControl\obj\Debug\WinServiceControl.Properties.Resources.resources
+E:\Job\Project\DemoWinService\windows-service\WinServiceControl\obj\Debug\WinServiceControl.csproj.GenerateResource.Cache
+E:\Job\Project\DemoWinService\windows-service\WinServiceControl\obj\Debug\WinServiceControl.exe
+E:\Job\Project\DemoWinService\windows-service\WinServiceControl\obj\Debug\WinServiceControl.pdb
