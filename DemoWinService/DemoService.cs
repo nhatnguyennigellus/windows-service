@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RestSharp;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -10,148 +11,41 @@ using System.ServiceProcess;
 using System.Text;
 using System.Timers;
 using System.Windows.Forms;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Configuration;
 
 namespace DemoWinService
 {
-    public class MyWebRequest
-    {
-        private WebRequest request;
-        private Stream dataStream;
-
-        private string status;
-
-        public String Status
-        {
-            get
-            {
-                return status;
-            }
-            set
-            {
-                status = value;
-            }
-        }
-
-        public MyWebRequest(string url)
-        {
-            // Create a request using a URL that can receive a post.
-
-            request = WebRequest.Create(url);
-        }
-
-        public MyWebRequest(string url, string method)
-            : this(url)
-        {
-
-            if (method.Equals("GET") || method.Equals("POST"))
-            {
-                // Set the Method property of the request to POST.
-                request.Method = method;
-            }
-            else
-            {
-                throw new Exception("Invalid Method Type");
-            }
-        }
-
-        public MyWebRequest(string url, string method, string data)
-            : this(url, method)
-        {
-
-            // Create POST data and convert it to a byte array.
-            string postData = data;
-            byte[] byteArray = Encoding.UTF8.GetBytes(postData);
-
-            // Set the ContentType property of the WebRequest.
-            request.ContentType = "application/x-www-form-urlencoded";
-
-            // Set the ContentLength property of the WebRequest.
-            request.ContentLength = byteArray.Length;
-
-            // Get the request stream.
-            dataStream = request.GetRequestStream();
-
-            // Write the data to the request stream.
-            dataStream.Write(byteArray, 0, byteArray.Length);
-
-            // Close the Stream object.
-            dataStream.Close();
-
-        }
-
-        public string GetResponse()
-        {
-            // Get the original response.
-            WebResponse response = request.GetResponse();
-
-            this.Status = ((HttpWebResponse)response).StatusDescription;
-
-            // Get the stream containing all content returned by the requested server.
-            dataStream = response.GetResponseStream();
-
-            // Open the stream using a StreamReader for easy access.
-            StreamReader reader = new StreamReader(dataStream);
-
-            // Read the content fully up to the end.
-            string responseFromServer = reader.ReadToEnd();
-
-            // Clean up the streams.
-            reader.Close();
-            dataStream.Close();
-            response.Close();
-
-            return responseFromServer;
-        }
-    }
+    
     public partial class DemoService : ServiceBase
     {
         public DemoService()
         {
             InitializeComponent();
-            
         }
 
         System.IO.StreamWriter writer;
         StringBuilder builder;
-        string path = @"D:\nKid";
-        WebRequest request;
+        string path = @"D:\nKid\upload";
+        string accessToken;
+        string[] filePaths;
+        string cardID = "200000000850";
         protected override void OnStart(string[] args)
         {
             writer = new System.IO.StreamWriter("D:\\log.txt");
             builder = new StringBuilder();
+            
+
             timer1.Enabled = true;
             timer1.Start();
-
-            // Send request to server
-            //request = WebRequest.Create("http://192.168.12.250:8889/ping");
-            //request.Credentials = CredentialCache.DefaultCredentials;
-            //((HttpWebRequest)request).UserAgent = ".NET Framework Example Client";
-            //request.Method = "GET";
-            ////string postData = "Test.";
-            ////byte[] byteArray = Encoding.UTF8.GetBytes(postData);
-            ////request.ContentType = "application/x-www-form-urlencoded";
-            ////request.ContentLength = byteArray.Length;
-            //Stream dataStream = request.GetRequestStream();
-            ////dataStream.Write(byteArray, 0, byteArray.Length);
-            //dataStream.Close();
-            //WebResponse response = request.GetResponse();
-            //dataStream = response.GetResponseStream();
-            //Console.WriteLine(((HttpWebResponse)response).StatusDescription);
-            //StreamReader reader = new StreamReader(dataStream);
-            //string responseFromServer = reader.ReadToEnd();
-            //builder.AppendLine(responseFromServer);
-            //reader.Close();
-            //dataStream.Close();
-            //response.Close();
-            MyWebRequest request = new MyWebRequest("http://192.168.12.250:8889/ping", "GET");
-
-            builder.AppendLine("Connect to server - " + request.GetResponse());
-            builder.AppendLine("* Scanning " + path + "...");
-            scanFiles();
-            using (writer)
-            {
-                writer.Write(builder.ToString());
-            }
+            
+            //builder.AppendLine("* Scanning " + path + "...");
+            //  scanFiles();
+            //using (writer)
+            //{
+            //    writer.Write(builder.ToString());
+            //}
 
         }
 
@@ -170,32 +64,105 @@ namespace DemoWinService
 
         private void timer1_Tick(object sender, ElapsedEventArgs e)
         {
+            getAccessToken();
             timer1.Enabled = true;
             timer1.Stop();
             writer = new System.IO.StreamWriter("D:\\log.txt");
 
-            scanFiles();
+            //scanFiles();
 
+            builder.AppendLine(makeRequest());
             using (writer)
             {
                 writer.Write(builder.ToString());
             }
+
+
+
             timer1.Start();
         }
 
         private void scanFiles()
         {
-            string[] filePaths = Directory.GetFiles(path, "*.jpg");
+            filePaths = Directory.GetFiles(path, "*.jpg");
             if (Directory.Exists(path))
             {
-                builder.AppendLine("----- Scan result at " + DateTime.Now + " -----");
+                //builder.AppendLine("----- Scan result at " + DateTime.Now + " -----");
                 foreach (string file in filePaths)
                 {
                     string fileName = file.Substring(path.Length + 1);
-                    builder.AppendLine(fileName);
+                  //  builder.AppendLine(fileName);
 
                 }
             }
+        }
+
+        private void getAccessToken()
+        {
+            try
+            {
+                var client = new RestClient();
+                var request =
+                    new RestRequest("http://sandbox.tinizen.com/api/oauth/token",
+                        Method.POST);
+                request.RequestFormat = DataFormat.Json;
+                request.AddHeader("Accept", "application/json");
+                request.AddBody(new
+                {
+                    grant_type = ConfigurationManager.AppSettings["grant_type"],
+                    client_id = ConfigurationManager.AppSettings["client_id"],
+                    client_secret = ConfigurationManager.AppSettings["client_secret"],
+                    name = ConfigurationManager.AppSettings["name"],
+                    scope = ConfigurationManager.AppSettings["scope"]
+                });
+
+                RestResponse response = (RestResponse)client.Execute(request);
+
+                if (response != null &&
+                    ((response.StatusCode == HttpStatusCode.OK) &&
+                    (response.ResponseStatus == ResponseStatus.Completed)))
+                {
+                    JObject obj = JObject.Parse(response.Content);
+                    this.accessToken = (string)obj["access_token"];
+
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        private string makeRequest()
+        {
+            var client = new RestClient();
+            var request =
+                new RestRequest("http://sandbox.tinizen.com/api/cards/" + cardID + "?populate=owner",
+                    Method.GET);
+            request.RequestFormat = DataFormat.Json;
+            request.AddHeader("Content-Type", "application/json");
+            request.AddHeader("Authorization", "Bearer " + accessToken);
+
+            RestResponse<Owner> response = (RestResponse<Owner>)client.Execute(request);
+            RestResponse res = (RestResponse)client.Execute(request);
+            if (response != null &&
+                    ((response.StatusCode == HttpStatusCode.OK) &&
+                    (response.ResponseStatus == ResponseStatus.Completed)))
+            {
+                //JObject obj = JObject.Parse(response.Content);
+               // this.accessToken = (string)obj["access_token"];
+                JObject obj = JObject.Parse(res.Content);
+                string status = (string)obj["status"];
+                if (status != null && status == "404")
+                {
+                    return "Not found";
+                }
+                obj = JObject.Parse(response.Content);
+                var firstName = response.Data.first_name;
+                return firstName;
+            }
+            return null;
         }
     }
 }

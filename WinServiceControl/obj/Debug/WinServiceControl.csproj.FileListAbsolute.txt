@@ -16,3 +16,7 @@ E:\Job\Project\DemoWinService\windows-service\WinServiceControl\obj\Debug\WinSer
 E:\Job\Project\DemoWinService\windows-service\WinServiceControl\obj\Debug\WinServiceControl.csproj.GenerateResource.Cache
 E:\Job\Project\DemoWinService\windows-service\WinServiceControl\obj\Debug\WinServiceControl.exe
 E:\Job\Project\DemoWinService\windows-service\WinServiceControl\obj\Debug\WinServiceControl.pdb
+E:\Job\Project\DemoWinService\windows-service\WinServiceControl\bin\Debug\RestSharp.dll
+E:\Job\Project\DemoWinService\windows-service\WinServiceControl\bin\Debug\RestSharp.xml
+E:\Job\Project\DemoWinService\windows-service\WinServiceControl\bin\Debug\WinServiceControl.exe.config
+E:\Job\Project\DemoWinService\windows-service\WinServiceControl\bin\Debug\Newtonsoft.Json.dll
