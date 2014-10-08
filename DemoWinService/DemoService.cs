@@ -25,27 +25,27 @@ namespace DemoWinService
             InitializeComponent();
         }
 
-        System.IO.StreamWriter writer;
+        StreamWriter writer;
         StringBuilder builder;
         string path = @"D:\nKid\upload";
-        string accessToken;
-        string[] filePaths;
+        string accessToken = "mp41-SfOamSXYS2CApwk1PCdS3j4WgP9";
+        //string[] filePaths;
         string cardID = "200000000850";
         protected override void OnStart(string[] args)
         {
-            writer = new System.IO.StreamWriter("D:\\log.txt");
+            writer = new StreamWriter("D:\\log.txt");
             builder = new StringBuilder();
-            
-
             timer1.Enabled = true;
             timer1.Start();
-            
-            //builder.AppendLine("* Scanning " + path + "...");
-            //  scanFiles();
-            //using (writer)
-            //{
-            //    writer.Write(builder.ToString());
-            //}
+
+            builder.AppendLine("* Scanning...");
+            //builder.AppendLine(accessToken);
+            //builder.AppendLine((makeRequest() == "False") ? "Avatar unavailable!" : "Avatar AVAILABLE");
+          //--  scanFiles();
+            using (writer)
+            {
+                writer.Write(builder.ToString());
+            }
 
         }
 
@@ -54,7 +54,7 @@ namespace DemoWinService
             timer1.Enabled = false;
             timer1.Stop();
 
-            builder.AppendLine("* Stop scanning " + path + "...");
+            builder.AppendLine("* Stop scanning...");
 
             using (writer)
             {
@@ -64,14 +64,18 @@ namespace DemoWinService
 
         private void timer1_Tick(object sender, ElapsedEventArgs e)
         {
-            getAccessToken();
+            writer = new StreamWriter("D:\\log.txt");
             timer1.Enabled = true;
             timer1.Stop();
-            writer = new System.IO.StreamWriter("D:\\log.txt");
+            
+          //--  scanFiles();
+            
+            //getAccessToken(); 
 
-            //scanFiles();
-
-            builder.AppendLine(makeRequest());
+            
+            builder.AppendLine("----- " + DateTime.Now + " -----");
+          //  builder.AppendLine(accessToken);
+         //   builder.AppendLine((makeRequest() == "False") ? "Avatar unavailable!" : "Avatar AVAILABLE");
             using (writer)
             {
                 writer.Write(builder.ToString());
@@ -82,16 +86,37 @@ namespace DemoWinService
             timer1.Start();
         }
 
+        private string makeRequest()
+        {
+            var client = new RestClient();
+            var request =
+                new RestRequest("http://sandbox.tinizen.com/api/cards/" + cardID + "?populate=owner",
+                    Method.GET);
+            request.RequestFormat = DataFormat.Json;
+            request.AddHeader("Content-Type", "application/json");
+            request.AddHeader("Authorization", "Bearer " + accessToken);
+
+            RestResponse response = (RestResponse)client.Execute(request);
+            if (response != null &&
+                    ((response.StatusCode == HttpStatusCode.OK) &&
+                    (response.ResponseStatus == ResponseStatus.Completed)))
+            {
+                JObject obj = JObject.Parse(response.Content);
+
+                return (string)obj["owner"]["profile_picture"]["user_uploaded"];
+            }
+            return "ID not found";
+        }
         private void scanFiles()
         {
-            filePaths = Directory.GetFiles(path, "*.jpg");
+            string[] filePaths = Directory.GetFiles(path, "*.jpg");
             if (Directory.Exists(path))
             {
-                //builder.AppendLine("----- Scan result at " + DateTime.Now + " -----");
+                builder.AppendLine("----- Scan result at " + DateTime.Now + " -----");
                 foreach (string file in filePaths)
                 {
                     string fileName = file.Substring(path.Length + 1);
-                  //  builder.AppendLine(fileName);
+                    builder.AppendLine(fileName);
 
                 }
             }
@@ -134,35 +159,6 @@ namespace DemoWinService
             }
         }
 
-        private string makeRequest()
-        {
-            var client = new RestClient();
-            var request =
-                new RestRequest("http://sandbox.tinizen.com/api/cards/" + cardID + "?populate=owner",
-                    Method.GET);
-            request.RequestFormat = DataFormat.Json;
-            request.AddHeader("Content-Type", "application/json");
-            request.AddHeader("Authorization", "Bearer " + accessToken);
-
-            RestResponse<Owner> response = (RestResponse<Owner>)client.Execute(request);
-            RestResponse res = (RestResponse)client.Execute(request);
-            if (response != null &&
-                    ((response.StatusCode == HttpStatusCode.OK) &&
-                    (response.ResponseStatus == ResponseStatus.Completed)))
-            {
-                //JObject obj = JObject.Parse(response.Content);
-               // this.accessToken = (string)obj["access_token"];
-                JObject obj = JObject.Parse(res.Content);
-                string status = (string)obj["status"];
-                if (status != null && status == "404")
-                {
-                    return "Not found";
-                }
-                obj = JObject.Parse(response.Content);
-                var firstName = response.Data.first_name;
-                return firstName;
-            }
-            return null;
-        }
+        
     }
 }

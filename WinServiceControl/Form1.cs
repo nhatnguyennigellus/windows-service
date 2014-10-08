@@ -12,7 +12,8 @@ using RestSharp;
 using System.Net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using RestSharp.Deserializers;
+using System.Configuration;
+using System.IO;
 
 namespace WinServiceControl
 {
@@ -36,11 +37,11 @@ namespace WinServiceControl
                 request.AddHeader("Accept", "application/json");
                 request.AddBody(new
                 {
-                    grant_type = "client_credentials",
-                    client_id = "example_id",
-                    client_secret = "7cbe80709c9eab855e14ac10adc250ea",
-                    name = "tiNi example clients",
-                    scope = "*"
+                    grant_type = ConfigurationManager.AppSettings["grant_type"],
+                    client_id = ConfigurationManager.AppSettings["client_id"],
+                    client_secret = ConfigurationManager.AppSettings["client_secret"],
+                    name = ConfigurationManager.AppSettings["name"],
+                    scope = ConfigurationManager.AppSettings["scope"]
                 });
 
                 RestResponse response = (RestResponse)client.Execute(request);
@@ -51,6 +52,10 @@ namespace WinServiceControl
                 {
                     JObject obj = JObject.Parse(response.Content);
                     accessToken = (string)obj["access_token"];
+                    /*StreamWriter writer = new StreamWriter("D:\\log.txt");
+                    StringBuilder builder = new StringBuilder();
+                    builder.AppendLine(accessToken);*/
+                    textBox1.Text =  accessToken;
                     sttService.Text = (makeRequest() == "False") ? "Avatar unavailable!" : "Avatar AVAILABLE";
                 }
             }
